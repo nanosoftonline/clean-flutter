@@ -7,7 +7,8 @@ import 'dart:async' as _i4;
 
 import 'package:crm/core/error/failures.dart' as _i5;
 import 'package:crm/domain/model/customer.dart' as _i6;
-import 'package:crm/domain/repositories/implementations/customer_repository_impl.dart' as _i3;
+import 'package:crm/domain/repositories/implementations/customer_repository_impl.dart'
+    as _i3;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -35,26 +36,39 @@ class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
 /// A class which mocks [CustomerRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCustomerRepository extends _i1.Mock implements _i3.CustomerRepository {
+class MockCustomerRepository extends _i1.Mock
+    implements _i3.CustomerRepository {
   MockCustomerRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Customer>>?> getAllCustomers() => (super.noSuchMethod(
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Customer>>> getAllCustomers() =>
+      (super.noSuchMethod(
         Invocation.method(
           #getAllCustomers,
           [],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, List<_i6.Customer>>?>.value(),
-      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Customer>>?>);
+        returnValue:
+            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Customer>>>.value(
+                _FakeEither_0<_i5.Failure, List<_i6.Customer>>(
+          this,
+          Invocation.method(
+            #getAllCustomers,
+            [],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Customer>>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, void>> createCustomer(_i6.Customer? data) => (super.noSuchMethod(
+  _i4.Future<_i2.Either<_i5.Failure, void>> createCustomer(
+          _i6.Customer? data) =>
+      (super.noSuchMethod(
         Invocation.method(
           #createCustomer,
           [data],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(_FakeEither_0<_i5.Failure, void>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
+            _FakeEither_0<_i5.Failure, void>(
           this,
           Invocation.method(
             #createCustomer,
@@ -63,12 +77,14 @@ class MockCustomerRepository extends _i1.Mock implements _i3.CustomerRepository 
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, void>>);
   @override
-  _i4.Future<_i2.Either<_i5.Failure, void>> deleteCustomer(String? id) => (super.noSuchMethod(
+  _i4.Future<_i2.Either<_i5.Failure, void>> deleteCustomer(String? id) =>
+      (super.noSuchMethod(
         Invocation.method(
           #deleteCustomer,
           [id],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(_FakeEither_0<_i5.Failure, void>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
+            _FakeEither_0<_i5.Failure, void>(
           this,
           Invocation.method(
             #deleteCustomer,
@@ -89,7 +105,8 @@ class MockCustomerRepository extends _i1.Mock implements _i3.CustomerRepository 
             data,
           ],
         ),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(_FakeEither_0<_i5.Failure, void>(
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
+            _FakeEither_0<_i5.Failure, void>(
           this,
           Invocation.method(
             #updateCustomer,

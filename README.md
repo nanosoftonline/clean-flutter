@@ -159,18 +159,16 @@ Languages like Java, allow you used to use the keyword "throws" to mark a functi
 
 
 
-#### Enter Functional Programming to help us
-We'll use Functional programming to minimize or eliminate the side effects of these exceptions.
-Instead of throwing an exception we now have a way of defining the return type of the function as Either returning an application type or Failure type.
+#### Functional Programming help us
+We'll use Functional Programming (FP) to minimize or eliminate the side effects of these exceptions.
+Instead of throwing an exception we now have a way of defining the return type of the function as either returning an application type or Failure type.
 
 
 <div style="text-align:center">
   <img src="docs/side_effects_no_side_effects.png"  width="600px"/>
 </div>
 
-The **dartz** package has an *Either* type which holds 2 value types. One on the (L)eft and one on the (R)ight. We'll use this type as the deterministic return type for the function. 
-Normally we put the Failure in the left one. Let's show this with code.
-
+The [**dartz**](https://pub.dev/packages/dartz) package has an *Either* type which holds 2 value types (Left and Right). We'll use this type as our deterministic return type of the function.
 Let's define the Failure type
 ```dart
 //lib/core/error/failures.dart
@@ -181,7 +179,7 @@ abstract class Failure extends Equatable {
 }
 ```
 
-Let's see this when we write an interface contract for our customer repository
+Let's see this when we write an interface contract for our customer repository. We always need an interface for any injectable class. This class will be used and hence injected into several use case classes later.
 
 ```dart
 //lib/domain/repository/interfaces/customer_repository.dart
@@ -202,10 +200,9 @@ abstract class CustomerRepository {
 And that's it. We'll now handle the side effect inside the function and return the appropriate Either result.  
 
 #### TDD
-We have just created non-testable pieces of production code (models and interfaces). It's not time to write some production code. We'll start with the business logic which exists with our use cases.
 
 ##### Use Case: Get All Customers
-Before we create the "Get all customers" use cases let's define an interface for it. In Dart, we use abstract classes to define interfaces. Why do we need an interface? To dynamically inject this use case into code that is dependent on it we need an interface. 
+Before we create the "Get all customers" use cases let's define an interface or contract for it. From the flow diagram above we can see that this class will be used by one or more view models.
 
 ```dart
 //lib/domain/use_cases/customer/get_all_customers.dart
@@ -218,22 +215,32 @@ abstract class GetAllCustomers {
 }
 ```
 
-We'll use the same file to hold the implementation of this interface, but we'll use TDD to drive the development of that implementation.
+We'll use the same file to hold the implementation of this interface. 
 
+We now need to create the implementation of this interface. 
 
-Let's write the first test
+The whole process of TDD can be broken down into these steps:
+
+* Write test code, but it doesn’t compile (of course). The file does not exist.
+* Write a line or two of production code that makes the test compile.
+* Write more lines test code that compiles but fails an assertion.
+* Write more lines of production code that pass the assertion.
+
+Let's write the first test.
 ```dart
 //test/domain/use_cases/customer/get_all_customers_test.dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+
 import 'package:crm/domain/repositories/implementations/customer_repository_impl.dart';
 import 'package:crm/domain/use_cases/customer/get_all_customers.dart';
-import 'package:mockito/mockito.dart';
-import 'package:flutter_test/flutter_test.dart';
 
-class MockCustomerRepository extends Mock implements CustomerRepository {}
+import 'get_all_customers_test.mocks.dart';
 
+@GenerateMocks([CustomerRepository])
 void main() {
-  GetAllCustomers usecase;
-  MockCustomerRepository mockCustomerRepository;
+  late CustomerRepository mockCustomerRepository;
+  late GetAllCustomers usecase;
 
   setUp(() {
     mockCustomerRepository = MockCustomerRepository();
@@ -241,20 +248,112 @@ void main() {
   });
 
   test("should get all customers from the customer repository", () async {
-    
+   
   });
 }
 ```
+The test doesn't compile because the use case class does not exist.
 
-In this test, we create a mock customer repository and inject that into the use case. 
-
-###### First Law
-```
-Write no production code until you have first written a test that fails due to the lack of that production code.
-```
-
-The test does not compile and thus fails. We need to create the production code to fix this.
+##### *A note on Mocks*
+Because the "get all customers" use case has a customer repository dependency, we need to mock the customer repository.
+We add the generate attribute to our test to instruct Dart to generate mocks and place it next to the test file.
 
 ```dart
+@GenerateMocks([CustomerRepository])
+```
+
+To use Mockito's generated mock classes, add a build_runner dependency in your package's pubspec.yaml file, under dev_dependencies; something like build_runner: ^1.11.0. We then generate the mocks by running the following command in the project folder
 
 ```
+$> flutter pub run build_runner build
+```
+Once the mock is generated you can import it 
+
+```dart
+import 'get_all_customers_test.mocks.dart';
+```
+
+The setup of the test is now complete but the test fails because the class "GetAllCustomersImpl" does not exist. 
+
+Let's write some production code to make the test pass
+```dart
+//lib/domain/use-cases/customer/get_all_customers.dart
+import 'package:crm/core/error/failures.dart';
+import 'package:crm/domain/model/customer.dart';
+import 'package:crm/domain/repositories/implementations/customer_repository_impl.dart';
+import 'package:dartz/dartz.dart';
+
+abstract class GetAllCustomers {
+  Future<Either<Failure, List<Customer>>> execute();
+}
+
+class GetAllCustomersImpl implements GetAllCustomers {
+  final CustomerRepository customerRepository;
+
+  GetAllCustomersImpl(this.customerRepository);
+
+  @override
+  Future<Either<Failure, List<Customer>>> execute() async {
+    return const Right([]);
+  }
+}
+```
+The test now passes
+
+<div style="text-align:center">
+  <img src="docs/tdd_1.png"  width="800px"/>
+</div>
+
+Let's write a test that compiles but fails assertion,
+
+```dart
+  test("should get all customers from the customer repository", () async {
+    Either<Failure, List<Customer>> repoResult = const Right<Failure, List<Customer>>([
+      Customer(
+        id: "123",
+        email: "john@company.com",
+        name: "John",
+      ),
+      Customer(
+        id: "124",
+        email: "jane@company.com",
+        name: "Jane",
+      )
+    ]);
+
+    when(mockCustomerRepository.getAllCustomers()).thenAnswer((_) async => repoResult);
+
+    final result = await usecase.execute();
+
+    expect(result, equals(repoResult));
+  });
+```
+
+We can make it pass by simply hard coding a result
+
+<div style="text-align:center">
+  <img src="docs/tdd_2.png"  width="800px"/>
+</div>
+
+This is kind of stupid, but it shows that our test is not good enough. We need we to write more test code. We need to verify that the repository was called
+
+```dart
+...
+    expect(result, equals(repoResult));
+    verify(mockCustomerRepository.getAllCustomers());
+...
+```
+This line makes the test fail with:
+
+```
+No matching calls (actually, no calls at all).
+```
+
+Let's fix it by writing better production code
+
+<div style="text-align:center">
+  <img src="docs/tdd_3.png"  width="800px"/>
+</div>
+
+
+An this completes the test and production code for "get all customers" use case.

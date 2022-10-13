@@ -4,7 +4,7 @@ import 'package:crm/domain/repositories/implementations/customer_repository_impl
 import 'package:dartz/dartz.dart';
 
 abstract class GetAllCustomers {
-  Future<Either<Failure, List<Customer>>?> execute();
+  Future<Either<Failure, List<Customer>>> execute();
 }
 
 class GetAllCustomersImpl implements GetAllCustomers {
@@ -13,7 +13,7 @@ class GetAllCustomersImpl implements GetAllCustomers {
   GetAllCustomersImpl(this.customerRepository);
 
   @override
-  Future<Either<Failure, List<Customer>>?> execute() async {
+  Future<Either<Failure, List<Customer>>> execute() async {
     return await customerRepository.getAllCustomers();
   }
 }

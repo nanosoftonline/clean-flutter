@@ -21,7 +21,18 @@ void main() {
   });
 
   test("should get all customers from the customer repository", () async {
-    Either<Failure, List<Customer>> repoResult = const Right<Failure, List<Customer>>([]);
+    Either<Failure, List<Customer>> repoResult = const Right<Failure, List<Customer>>([
+      Customer(
+        id: "123",
+        email: "john@company.com",
+        name: "John",
+      ),
+      Customer(
+        id: "124",
+        email: "jane@company.com",
+        name: "Jane",
+      )
+    ]);
 
     when(mockCustomerRepository.getAllCustomers()).thenAnswer((_) async => repoResult);
 

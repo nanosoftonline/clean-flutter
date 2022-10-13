@@ -16,8 +16,8 @@ class Customer extends Equatable {
     required this.id,
     required this.name,
     required this.email,
-    required this.isActive,
-    required this.customerType,
+    this.isActive = true,
+    this.customerType = CustomerType.customer,
   });
 
   @override
