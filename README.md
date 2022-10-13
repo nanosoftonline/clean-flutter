@@ -221,8 +221,8 @@ We now need to create the implementation of this interface.
 
 The whole process of TDD can be broken down into these steps:
 
-* Write test code, but it doesn’t compile (of course). The file does not exist.
-* Write a line or two of production code that makes the test compile.
+* Write test code, but it doesn’t compile (of course).
+* Write a lines of production code that makes the test compile.
 * Write more lines test code that compiles but fails an assertion.
 * Write more lines of production code that pass the assertion.
 
