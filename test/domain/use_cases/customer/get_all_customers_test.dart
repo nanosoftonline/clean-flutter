@@ -40,5 +40,6 @@ void main() {
 
     expect(result, equals(repoResult));
     verify(mockCustomerRepository.getAllCustomers());
+    verifyNoMoreInteractions(mockCustomerRepository);
   });
 }

@@ -160,7 +160,7 @@ Languages like Java, allow you used to use the keyword "throws" to mark a functi
   <img src="docs/side_effects_no_side_effects.png"  width="600px"/>
 </div>
 
-This is a Functional Programming (FP) approach or creating pure functions (functions without side effects). The [**dartz**](https://pub.dev/packages/dartz) package gives us the ability to write Dart in a more FP way. It has a type called **Either**  which is used to represent a value that can have two possible types, (Left and Right). We'll use this type as our deterministic return type of the function
+This is a Functional Programming (FP) approach of creating pure functions (functions without side effects). The [**dartz**](https://pub.dev/packages/dartz) package gives us the ability to write Dart in a more FP way. It has a type called **Either**  which is used to represent a value that can have two possible types. We'll use this type as our deterministic return type of the function
 
 Let's define the Failure type
 ```dart
@@ -172,7 +172,7 @@ abstract class Failure extends Equatable {
 }
 ```
 
-Let's see this in action when we write an interface/contract for our customer repository. We always need an interface for any injectable class. This class will be used and hence injected into several use case classes later.
+We see this in action in our customer repository interface/contract.
 
 ```dart
 //lib/domain/repository/interfaces/customer_repository.dart
@@ -183,9 +183,9 @@ import "package:dartz/dartz.dart";
 
 abstract class CustomerRepository {
   Future<Either<Failure, List<Customer>>> getAllCustomers();
-  Future<Either<Failure, void>> createCustomer(Customer data);
-  Future<Either<Failure, void>> deleteCustomer(String id);
-  Future<Either<Failure, void>> updateCustomer(String id, Customer data);
+  Future<Either<Failure, Unit>> createCustomer(Customer data);
+  Future<Either<Failure, Unit>> deleteCustomer(String id);
+  Future<Either<Failure, Unit>> updateCustomer(String id, Customer data);
 }
 
 ```
@@ -193,7 +193,7 @@ abstract class CustomerRepository {
 #### TDD
 
 ##### Use Case: Get All Customers
-Before we create the "Get all customers" use case let's define an interface or contract for it. From the flow diagram above, we can see that this class will be used by one or more view models.
+Before we create the "Get all customers" use case implemenation, let's define an interface or contract for it.
 
 ```dart
 //lib/domain/use_cases/customer/get_all_customers.dart
@@ -207,14 +207,14 @@ abstract class GetAllCustomers {
 ```
 
 
-We now need to create the implementation of this interface. We'll use the same file to hold the implementation of this interface. 
+Using TDD, we'll create the implementation of this interface. We'll use the same file to hold the implementation.
 
 The whole process of TDD can be broken down into these steps:
 
 * Write test code, but it doesn’t compile (of course).
 * Write production code to make test compile.
 * Write test code that compiles but fails an assertion.
-* Write production code to make test pass.
+* Write production code to pass assertion.
 
 Let's write the first test.
 ```dart
@@ -248,6 +248,8 @@ void main() {
 ```
 Failed to load "get_all_customers_test.dart": Compilation failed
 ```
+
+Lets discuss mocks before we fix the test.
 ##### *A note on Mocks*
 Because the "get all customers" use case has a customer repository dependency, we need to mock the customer repository based on the customer repository interface.
 We add the generate attribute to our test to instruct Dart to generate mocks and place it next to the test file.
@@ -335,7 +337,7 @@ We can make it pass by simply hard coding a result
   <img src="docs/tdd_2.png"  width="800px"/>
 </div>
 
-This is kind of silly, but it shows that our test is not good enough. We need we to write more test code. We need to verify that the repository was called
+This is kind of silly, but it shows that our test is not good enough. In our test we need to verify that the repository was called, so we add a verify line to our test
 
 ```dart
 ...
@@ -357,3 +359,12 @@ Let's fix it by writing better production code
 
 
 And this completes the test and production code for "get all customers" use case.
+
+##### The Remaining Use Cases
+
+Using the same process, through TDD we can code up the remaining use cases
+
+<div style="text-align:center">
+  <img src="docs/tdd_create_customer.png"  width="800px"/>
+</div>
+
