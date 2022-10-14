@@ -105,8 +105,8 @@ class Customer extends Equatable {
     required this.id,
     required this.name,
     required this.email,
-    required this.isActive,
-    required this.customerType,
+    this.isActive = true,
+    this.customerType = CustomerType.customer,
   });
 
   @override
@@ -114,6 +114,7 @@ class Customer extends Equatable {
     return [id, name, email, isActive, customerType];
   }
 }
+
 ```
 
 ##### Task Model
@@ -147,28 +148,20 @@ class Task {
  ```
 
 ### Error and Exception Handling
-Exception handling differs from error handling in that the former involves conditions an application might catch versus serious problems an application might want to avoid. In contrast, error handling helps maintain the normal flow of software program execution. 
-
 Typically exceptions and errors are caught and handled by using "try-catch" blocks wrapping a piece of code that might throw. Functions like these are said to have side effects.
 
 <div style="text-align:center">
   <img src="docs/side_effects.png"  width="600px"/>
 </div>
 
-Languages like Java, allow you used to use the keyword "throws" to mark a function that might have exception side effects. The Dart language does not allow you to mark functions as potentially throwing, we typically allow the error to bubble up to a point where it can be centrally handled (typically near the UI). There is nothing wrong with this. We would like to however take a different approach. Instead of the exception bubbling up, we'd like to catch side-effect exceptions as soon as possible allowing the function to return something through its return value.
-
-
-
-#### Functional Programming help us
-We'll use Functional Programming (FP) to minimize or eliminate the side effects of these exceptions.
-Instead of throwing an exception we now have a way of defining the return type of the function as either returning an application type or Failure type.
-
+Languages like Java, allow you used to use the keyword "throws" to mark a function that might have exception side effects. The Dart language does not allow you to mark functions as potentially throwing, we typically allow the error to bubble up to a point where it can be centrally handled (typically near the UI). There is nothing wrong with this. We would like to however take a different approach. Instead of throwing exceptions, we'd like to catch side-effect exceptions and channel the failure to the function's return value.
 
 <div style="text-align:center">
   <img src="docs/side_effects_no_side_effects.png"  width="600px"/>
 </div>
 
-The [**dartz**](https://pub.dev/packages/dartz) package has an *Either* type which holds 2 value types (Left and Right). We'll use this type as our deterministic return type of the function.
+This is a Functional Programming (FP) approach or creating pure functions (functions without side effects). The [**dartz**](https://pub.dev/packages/dartz) package gives us the ability to write Dart in a more FP way. It has a type called **Either**  which is used to represent a value that can have two possible types, (Left and Right). We'll use this type as our deterministic return type of the function
+
 Let's define the Failure type
 ```dart
 //lib/core/error/failures.dart
@@ -179,7 +172,7 @@ abstract class Failure extends Equatable {
 }
 ```
 
-Let's see this when we write an interface contract for our customer repository. We always need an interface for any injectable class. This class will be used and hence injected into several use case classes later.
+Let's see this in action when we write an interface/contract for our customer repository. We always need an interface for any injectable class. This class will be used and hence injected into several use case classes later.
 
 ```dart
 //lib/domain/repository/interfaces/customer_repository.dart
@@ -197,12 +190,10 @@ abstract class CustomerRepository {
 
 ```
 
-And that's it. We'll now handle the side effect inside the function and return the appropriate Either result.  
-
 #### TDD
 
 ##### Use Case: Get All Customers
-Before we create the "Get all customers" use cases let's define an interface or contract for it. From the flow diagram above we can see that this class will be used by one or more view models.
+Before we create the "Get all customers" use case let's define an interface or contract for it. From the flow diagram above, we can see that this class will be used by one or more view models.
 
 ```dart
 //lib/domain/use_cases/customer/get_all_customers.dart
@@ -215,16 +206,15 @@ abstract class GetAllCustomers {
 }
 ```
 
-We'll use the same file to hold the implementation of this interface. 
 
-We now need to create the implementation of this interface. 
+We now need to create the implementation of this interface. We'll use the same file to hold the implementation of this interface. 
 
 The whole process of TDD can be broken down into these steps:
 
 * Write test code, but it doesn’t compile (of course).
-* Write a lines of production code that makes the test compile.
-* Write more lines test code that compiles but fails an assertion.
-* Write more lines of production code that pass the assertion.
+* Write production code to make test compile.
+* Write test code that compiles but fails an assertion.
+* Write production code to make test pass.
 
 Let's write the first test.
 ```dart
@@ -252,10 +242,14 @@ void main() {
   });
 }
 ```
-The test doesn't compile because the use case class does not exist.
 
+
+###### Test Result: 
+```
+Failed to load "get_all_customers_test.dart": Compilation failed
+```
 ##### *A note on Mocks*
-Because the "get all customers" use case has a customer repository dependency, we need to mock the customer repository.
+Because the "get all customers" use case has a customer repository dependency, we need to mock the customer repository based on the customer repository interface.
 We add the generate attribute to our test to instruct Dart to generate mocks and place it next to the test file.
 
 ```dart
@@ -329,13 +323,19 @@ Let's write a test that compiles but fails assertion,
   });
 ```
 
+###### Test Result: 
+```
+  Expected: Right<Failure, List<Customer>>:<Right([Customer(123, John, john@company.com, true, CustomerType.customer), Customer(124, Jane, jane@company.com, true, CustomerType.customer)])>
+    Actual: Right<Failure, List<Customer>>:<Right([])>
+```
+
 We can make it pass by simply hard coding a result
 
 <div style="text-align:center">
   <img src="docs/tdd_2.png"  width="800px"/>
 </div>
 
-This is kind of stupid, but it shows that our test is not good enough. We need we to write more test code. We need to verify that the repository was called
+This is kind of silly, but it shows that our test is not good enough. We need we to write more test code. We need to verify that the repository was called
 
 ```dart
 ...
@@ -343,10 +343,10 @@ This is kind of stupid, but it shows that our test is not good enough. We need w
     verify(mockCustomerRepository.getAllCustomers());
 ...
 ```
-This line makes the test fail with:
 
+###### Test Result:
 ```
-No matching calls (actually, no calls at all).
+ No matching calls (actually, no calls at all).
 ```
 
 Let's fix it by writing better production code
@@ -356,4 +356,4 @@ Let's fix it by writing better production code
 </div>
 
 
-An this completes the test and production code for "get all customers" use case.
+And this completes the test and production code for "get all customers" use case.

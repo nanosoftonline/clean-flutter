@@ -14,6 +14,7 @@ class GetAllCustomersImpl implements GetAllCustomers {
 
   @override
   Future<Either<Failure, List<Customer>>> execute() async {
-    return await customerRepository.getAllCustomers();
+    var result = await customerRepository.getAllCustomers();
+    return result;
   }
 }
