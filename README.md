@@ -1,8 +1,8 @@
 # Clean Architecture CRM (Customer relationship management)
 
-In this project, we will explore the process of creating a CRM application using a [Robert C Martin](https://en.wikipedia.org/wiki/Robert_C._Martin) philosophy called Clean Architecture.
+In this project, we'll use the process of creating a CRM application to discuss a [Robert C Martin](https://en.wikipedia.org/wiki/Robert_C._Martin) philosophy called Clean Architecture.
 
-We'll be using Flutter/Dart for this application and discuss TDD and Error Handling
+We'll be using Flutter/Dart
 
 ### Use Cases of the Application
 Customer Relationship Management (CRM) is a strategy that companies use to manage interactions (or tasks) with customers and potential customers (leads).
@@ -28,18 +28,15 @@ We'll implement the following use cases:
    
 
 ### What is Clean Architecture?
-"Clean Architecture" was coined by [Robert C Martin](https://en.wikipedia.org/wiki/Robert_C._Martin) and is a software design philosophy that organizes code in such a way that business logic is kept separate from technical implementation (databases, APIs, frameworks). This makes it easy to maintain, change and test.
+"Clean Architecture" was coined by [Robert C Martin](https://en.wikipedia.org/wiki/Robert_C._Martin) and is a software design philosophy that organizes code in such a way that business logic is kept separate from technical implementation (databases, APIs, frameworks). This makes application functionality easy to maintain, change and test.
 
-We should be able to change the presentation (UI) or data source (databases or API) easily without changing the business logic (use cases).
+Clean Architecture allow us to change the presentation (UI or consumer facing parts) or data source (databases, API or backend parts) easily without affecting business logic (use cases).
 
 
 <div style="text-align:center">
   <img src="docs/unclebobcleanarch.png"  width="600px"/>
   <p style="color:gray; font-size:13px">Uncle Bob's Clean Architecture</p>
 </div>
-
-
-In the diagram, we see that each onion layer only knows and cares about its immediate inner layer as illustrated by arrows drawn from outer to inner.
 
 A more contextual front-end application illustration of clean architecture would be the following image which illustrates flow of control and data.
 
@@ -48,7 +45,7 @@ A more contextual front-end application illustration of clean architecture would
   <p style="color:gray; font-size:13px">Control and Data flow</p>
 </div>
 
-Before we start let's install a few flutter dependencies by adding the following packages to our *pubspec.yaml* file: 
+The pubspec.yaml file (located at the root of the project) specifies dependencies that the project requires, such as particular packages (and their versions). Let's install a few Flutter/Dart dependencies: 
 * **Equatable** for object comparison
 * **Dio** for HTTP calls
 * **Mockito** for mocking dependencies in our tests
