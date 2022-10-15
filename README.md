@@ -180,13 +180,13 @@ import 'package:crm/core/error/failures.dart';
 import 'package:crm/domain/model/customer.dart';
 
 import "package:dartz/dartz.dart";
-import 'package:uuid/uuid.dart';
 
 abstract class CustomerRepository {
   Future<Either<Failure, List<Customer>>> getAllCustomers();
+  Future<Either<Failure, Customer>> getCustomer(String id);
   Future<Either<Failure, Unit>> createCustomer(Customer data);
-  Future<Either<Failure, Unit>> deleteCustomer(Uuid id);
-  Future<Either<Failure, Unit>> updateCustomer(Uuid id, Customer data);
+  Future<Either<Failure, Unit>> deleteCustomer(String id);
+  Future<Either<Failure, Unit>> updateCustomer(String id, Customer data);
 }
 
 ```
@@ -367,13 +367,13 @@ Using the same process, through TDD we can code up the remaining use cases
 
 
 
-<div style="text-align:center">
+<div style="align:center">
   <img src="docs/tdd_create_customer.png"  width="800px"/>
   <p style="font-size:10px">Create Customer</p>
 </div>
 
 
-<div style="text-align:center">
+<div style="align:center">
   <img src="docs/tdd_delete_customer.png"  width="800px"/>
   <p style="font-size:10px">Delete Customer</p>
 </div>
