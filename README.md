@@ -374,3 +374,14 @@ Using the same process, through TDD we can code up the remaining use cases
   <img src="docs/tdd_delete_customer.png"  width="800px"/>
   <p style="font-size:10px">Delete Customer</p>
 </div>
+
+
+<div style="align:center">
+  <img src="docs/tdd_get_customer.png"  width="800px"/>
+  <p style="font-size:10px">Get Customer</p>
+</div>
+
+<div style="align:center">
+  <img src="docs/tdd_update_customer.png"  width="800px"/>
+  <p style="font-size:10px">Update Customer</p>
+</div>
