@@ -220,7 +220,7 @@ Let's write the first test.
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 
-import 'package:crm/domain/repositories/implementations/customer_repository_impl.dart';
+import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
 import 'package:crm/domain/use_cases/customer/get_all_customers.dart';
 
 import 'get_all_customers_test.mocks.dart';
@@ -274,7 +274,7 @@ Let's write some production code to make the test pass
 //lib/domain/use-cases/customer/get_all_customers.dart
 import 'package:crm/core/error/failures.dart';
 import 'package:crm/domain/model/customer.dart';
-import 'package:crm/domain/repositories/implementations/customer_repository_impl.dart';
+import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class GetAllCustomers {
@@ -292,11 +292,10 @@ class GetAllCustomersImpl implements GetAllCustomers {
   }
 }
 ```
-The test now passes
-
-<div style="text-align:center">
-  <img src="docs/tdd_1.png"  width="800px"/>
-</div>
+##### Test Result
+```
+All tests passed!  
+```
 
 Let's write a test that compiles but fails assertion,
 
@@ -331,9 +330,41 @@ Let's write a test that compiles but fails assertion,
 
 We can make it pass by simply hard coding a result
 
-<div style="text-align:center">
-  <img src="docs/tdd_2.png"  width="800px"/>
-</div>
+```dart
+//lib/domain/use_cases/customer/get_all_customers.dart
+import 'package:crm/core/error/failures.dart';
+import 'package:crm/domain/model/customer.dart';
+import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
+import 'package:dartz/dartz.dart';
+
+abstract class GetAllCustomers {
+  Future<Either<Failure, List<Customer>>> execute();
+}
+
+class GetAllCustomersImpl implements GetAllCustomers {
+  final CustomerRepository customerRepository;
+
+  GetAllCustomersImpl(this.customerRepository);
+
+  @override
+  Future<Either<Failure, List<Customer>>> execute() async {
+    var result = await customerRepository.getAllCustomers();
+    return const Right<Failure, List<Customer>>([
+        Customer(
+        id: "123",
+        email: "john@company.com",
+        name: "John",
+      ),
+      Customer(
+        id: "124",
+        email: "jane@company.com",
+        name: "Jane",
+      )
+    ]);
+  }
+}
+
+```
 
 This is kind of silly, but it shows that our test is not good enough. In our test we need to verify that the repository was called, so we add a verify line to our test
 
@@ -351,9 +382,29 @@ This is kind of silly, but it shows that our test is not good enough. In our tes
 
 Let's fix it by writing better production code
 
-<div style="text-align:center">
-  <img src="docs/tdd_3.png"  width="800px"/>
-</div>
+```dart
+//lib/domain/use_cases/customer/get_all_customers.dart
+import 'package:crm/core/error/failures.dart';
+import 'package:crm/domain/model/customer.dart';
+import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
+import 'package:dartz/dartz.dart';
+
+abstract class GetAllCustomers {
+  Future<Either<Failure, List<Customer>>> execute();
+}
+
+class GetAllCustomersImpl implements GetAllCustomers {
+  final CustomerRepository customerRepository;
+
+  GetAllCustomersImpl(this.customerRepository);
+
+  @override
+  Future<Either<Failure, List<Customer>>> execute() async {
+    var result = await customerRepository.getAllCustomers();
+    return result;
+  }
+}
+```
 
 
 And this completes the test and production code for "get all customers" use case.
