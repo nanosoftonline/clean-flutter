@@ -242,7 +242,7 @@ void main() {
 ```
 
 
-###### Test Result: 
+##### Test Result: 
 ```
 Failed to load "get_all_customers_test.dart": Compilation failed
 ```
@@ -322,7 +322,7 @@ Let's write a test that compiles but fails assertion,
   });
 ```
 
-###### Test Result: 
+##### Test Result: 
 ```
   Expected: Right<Failure, List<Customer>>:<Right([Customer(123, John, john@company.com, true, CustomerType.customer), Customer(124, Jane, jane@company.com, true, CustomerType.customer)])>
     Actual: Right<Failure, List<Customer>>:<Right([])>
@@ -375,7 +375,7 @@ This is kind of silly, but it shows that our test is not good enough. In our tes
 ...
 ```
 
-###### Test Result:
+##### Test Result:
 ```
  No matching calls (actually, no calls at all).
 ```
