@@ -111,7 +111,7 @@ class MockCustomerRepository extends _i1.Mock
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>> updateCustomer(
     String? id,
-    _i6.Customer? data,
+    dynamic data,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
