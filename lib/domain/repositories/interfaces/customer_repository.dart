@@ -5,7 +5,8 @@ import "package:dartz/dartz.dart";
 
 abstract class CustomerRepository {
   Future<Either<Failure, List<Customer>>> getAllCustomers();
-  Future<Either<Failure, void>> createCustomer(Customer data);
-  Future<Either<Failure, void>> deleteCustomer(String id);
-  Future<Either<Failure, void>> updateCustomer(String id, Customer data);
+  Future<Either<Failure, Customer>> getCustomer(String id);
+  Future<Either<Failure, Unit>> createCustomer(Customer data);
+  Future<Either<Failure, Unit>> deleteCustomer(String id);
+  Future<Either<Failure, Unit>> updateCustomer(String id, dynamic data);
 }

@@ -7,7 +7,7 @@ import 'dart:async' as _i4;
 
 import 'package:crm/core/error/failures.dart' as _i5;
 import 'package:crm/domain/model/customer.dart' as _i6;
-import 'package:crm/domain/repositories/implementations/customer_repository_impl.dart'
+import 'package:crm/domain/repositories/interfaces/customer_repository.dart'
     as _i3;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;

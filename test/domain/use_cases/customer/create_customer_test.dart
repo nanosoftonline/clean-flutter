@@ -1,6 +1,6 @@
 import 'package:crm/core/error/failures.dart';
 import 'package:crm/domain/model/customer.dart';
-import 'package:crm/domain/repositories/implementations/customer_repository_impl.dart';
+import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
 import 'package:crm/domain/use_cases/customer/create_customer.dart';
 import 'package:dartz/dartz.dart';
 import 'package:mockito/annotations.dart';

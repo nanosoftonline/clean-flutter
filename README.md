@@ -183,7 +183,7 @@ abstract class CustomerRepository {
   Future<Either<Failure, Customer>> getCustomer(String id);
   Future<Either<Failure, Unit>> createCustomer(Customer data);
   Future<Either<Failure, Unit>> deleteCustomer(String id);
-  Future<Either<Failure, Unit>> updateCustomer(String id, Customer data);
+  Future<Either<Failure, Unit>> updateCustomer(String id, dynamic data);
 }
 
 ```
@@ -360,28 +360,4 @@ And this completes the test and production code for "get all customers" use case
 
 #### The Remaining Use Cases
 
-Using the same process, through TDD we can code up the remaining use cases
-
-
-
-<div style="align:center">
-  <img src="docs/tdd_create_customer.png"  width="800px"/>
-  <p style="font-size:10px">Create Customer</p>
-</div>
-
-
-<div style="align:center">
-  <img src="docs/tdd_delete_customer.png"  width="800px"/>
-  <p style="font-size:10px">Delete Customer</p>
-</div>
-
-
-<div style="align:center">
-  <img src="docs/tdd_get_customer.png"  width="800px"/>
-  <p style="font-size:10px">Get Customer</p>
-</div>
-
-<div style="align:center">
-  <img src="docs/tdd_update_customer.png"  width="800px"/>
-  <p style="font-size:10px">Update Customer</p>
-</div>
+Using the same process, through TDD we can code up the remaining use cases. please check the [github repo](https://github.com/nanosoftonline/clean-flutter) for the other production code and tests
