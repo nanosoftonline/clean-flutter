@@ -13,7 +13,7 @@ class MakeCustomerActiveImpl implements MakeCustomerActive {
 
   @override
   Future<Either<Failure, Unit>> execute(String customerId) async {
-    final result = await customerRepository.updateCustomer(customerId, {"isActive": true});
+    final result = await customerRepository.updateCustomer(customerId, isActive: true);
     return result;
   }
 }

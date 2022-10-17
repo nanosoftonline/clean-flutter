@@ -1,4 +1,5 @@
 import 'package:crm/data/entities/customer_entity.dart';
+import 'package:crm/domain/model/customer.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class CustomerDataSource {
@@ -6,5 +7,11 @@ abstract class CustomerDataSource {
   Future<CustomerEntity> getOne(String id);
   Future<Unit> create(CustomerEntity data);
   Future<Unit> delete(String id);
-  Future<Unit> update(String id, dynamic data);
+  Future<Unit> update(
+    String id, {
+    String? customerName,
+    String? emailAddress,
+    CustomerType? type,
+    bool? active,
+  });
 }

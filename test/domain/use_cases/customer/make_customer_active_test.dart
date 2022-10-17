@@ -18,19 +18,19 @@ void main() {
     usecase = MakeCustomerActiveImpl(mockCustomerRepository);
   });
 
-  test("should call the updateCustomer repo method with customerId and {isActive: true} successfully", () async {
+  test("should call the updateCustomer repo method with customerId and isActive: true successfully", () async {
     //arrange
     const customerId = "1234";
     const data = {"isActive": true};
     Either<Failure, Unit> repoResponse = const Right(unit);
-    when(mockCustomerRepository.updateCustomer(customerId, data)).thenAnswer((_) async => repoResponse);
+    when(mockCustomerRepository.updateCustomer(customerId, isActive: true)).thenAnswer((_) async => repoResponse);
 
     //act
     final result = await usecase.execute(customerId);
 
     //assert
     expect(result, equals(repoResponse));
-    verify(mockCustomerRepository.updateCustomer(customerId, data));
+    verify(mockCustomerRepository.updateCustomer(customerId, isActive: true));
     verifyNoMoreInteractions(mockCustomerRepository);
   });
 }

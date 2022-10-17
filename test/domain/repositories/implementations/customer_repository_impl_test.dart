@@ -121,4 +121,61 @@ void main() {
       expect(result, equals(Left(ServerFailure())));
     });
   });
+
+  group("deleteCustomer", () {
+    test("should call 'delete' method of data source", () async {
+      //arrange
+      const customerId = "123";
+      Either<Failure, Unit> expected = const Right<Failure, Unit>(unit);
+      when(mockDS.delete(customerId)).thenAnswer((_) async => unit);
+
+      //act
+      final result = await customerRepository.deleteCustomer(customerId);
+
+      //assert
+      expect(result, equals(expected));
+    });
+
+    test("should return Failure when data source throws", () async {
+      //arrange
+      const customerId = "123";
+      when(mockDS.delete(customerId)).thenThrow(ServerFailure());
+
+      //act
+      final result = await customerRepository.deleteCustomer(customerId);
+
+      //assert
+      expect(result, equals(Left(ServerFailure())));
+    });
+  });
+
+  group("updateCustomer", () {
+    test("should call 'update' method of data source", () async {
+      //arrange
+      const customerId = "123";
+      Either<Failure, Unit> expected = const Right<Failure, Unit>(unit);
+      when(mockDS.update(customerId, customerName: "Jim")).thenAnswer((_) async => unit);
+
+      //act
+      final result = await customerRepository.updateCustomer(customerId, name: "Jim");
+
+      //assert
+      expect(result, equals(expected));
+      verify(mockDS.update(customerId, customerName: "Jim"));
+      verifyNoMoreInteractions(mockDS);
+    });
+
+    test("should return Failure when data source throws", () async {
+      //arrange
+      const customerId = "123";
+      Either<Failure, Unit> expected = const Right<Failure, Unit>(unit);
+      when(mockDS.update(customerId, customerName: "Jim")).thenThrow(ServerFailure());
+
+      //act
+      final result = await customerRepository.updateCustomer(customerId, name: "Jim");
+
+      //assert
+      expect(result, equals(Left(ServerFailure())));
+    });
+  });
 }

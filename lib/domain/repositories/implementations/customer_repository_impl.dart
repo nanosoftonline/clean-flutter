@@ -28,8 +28,8 @@ class CustomerRepositoryImpl implements CustomerRepository {
   @override
   Future<Either<Failure, Unit>> deleteCustomer(String id) async {
     try {
-      await customerDataSource.delete(id);
-      return const Right(unit);
+      final result = await customerDataSource.delete(id);
+      return Right(result);
     } catch (e) {
       return Left(ServerFailure());
     }
@@ -52,10 +52,16 @@ class CustomerRepositoryImpl implements CustomerRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> updateCustomer(String id, data) async {
+  Future<Either<Failure, Unit>> updateCustomer(
+    String id, {
+    String? name,
+    String? email,
+    CustomerType? customerType,
+    bool? isActive,
+  }) async {
     try {
-      await customerDataSource.update(id, data);
-      return const Right(unit);
+      final result = await customerDataSource.update(id, customerName: name, emailAddress: email, active: isActive);
+      return Right(result);
     } catch (e) {
       return Left(ServerFailure());
     }

@@ -8,6 +8,7 @@ import 'dart:async' as _i5;
 import 'package:crm/data/data_sources/interfaces/customer_datasource.dart'
     as _i4;
 import 'package:crm/data/entities/customer_entity.dart' as _i2;
+import 'package:crm/domain/model/customer.dart' as _i6;
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -105,25 +106,34 @@ class MockCustomerDataSource extends _i1.Mock
       ) as _i5.Future<_i3.Unit>);
   @override
   _i5.Future<_i3.Unit> update(
-    String? id,
-    dynamic data,
-  ) =>
+    String? id, {
+    String? customerName,
+    String? emailAddress,
+    _i6.CustomerType? type,
+    bool? active,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #update,
-          [
-            id,
-            data,
-          ],
+          [id],
+          {
+            #customerName: customerName,
+            #emailAddress: emailAddress,
+            #type: type,
+            #active: active,
+          },
         ),
         returnValue: _i5.Future<_i3.Unit>.value(_FakeUnit_1(
           this,
           Invocation.method(
             #update,
-            [
-              id,
-              data,
-            ],
+            [id],
+            {
+              #customerName: customerName,
+              #emailAddress: emailAddress,
+              #type: type,
+              #active: active,
+            },
           ),
         )),
       ) as _i5.Future<_i3.Unit>);

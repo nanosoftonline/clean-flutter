@@ -8,5 +8,11 @@ abstract class CustomerRepository {
   Future<Either<Failure, Customer>> getCustomer(String id);
   Future<Either<Failure, Unit>> createCustomer(Customer data);
   Future<Either<Failure, Unit>> deleteCustomer(String id);
-  Future<Either<Failure, Unit>> updateCustomer(String id, dynamic data);
+  Future<Either<Failure, Unit>> updateCustomer(
+    String id, {
+    String? name,
+    String? email,
+    CustomerType? customerType,
+    bool? isActive,
+  });
 }

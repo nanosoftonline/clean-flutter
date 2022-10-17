@@ -110,26 +110,35 @@ class MockCustomerRepository extends _i1.Mock
       ) as _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>);
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>> updateCustomer(
-    String? id,
-    dynamic data,
-  ) =>
+    String? id, {
+    String? name,
+    String? email,
+    _i6.CustomerType? customerType,
+    bool? isActive,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateCustomer,
-          [
-            id,
-            data,
-          ],
+          [id],
+          {
+            #name: name,
+            #email: email,
+            #customerType: customerType,
+            #isActive: isActive,
+          },
         ),
         returnValue: _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
             _FakeEither_0<_i5.Failure, _i2.Unit>(
           this,
           Invocation.method(
             #updateCustomer,
-            [
-              id,
-              data,
-            ],
+            [id],
+            {
+              #name: name,
+              #email: email,
+              #customerType: customerType,
+              #isActive: isActive,
+            },
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>);
