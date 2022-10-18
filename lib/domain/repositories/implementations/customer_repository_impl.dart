@@ -36,9 +36,9 @@ class CustomerRepositoryImpl implements CustomerRepository {
   }
 
   @override
-  Future<Either<Failure, List<Customer>>> getAllCustomers() async {
+  Future<Either<Failure, List<Customer>>> getAllCustomers(CustomerType customerType) async {
     try {
-      List<CustomerEntity> result = await customerDataSource.getAll();
+      List<CustomerEntity> result = await customerDataSource.find(type: customerType);
       return Right(result
           .map((e) => Customer(
                 id: e.id,
@@ -70,7 +70,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
   @override
   Future<Either<Failure, Customer>> getCustomer(String id) async {
     try {
-      final result = await customerDataSource.getOne(id);
+      final result = await customerDataSource.findOne(id);
       return Right(Customer(id: result.id, email: result.emailAddress, name: result.customerName));
     } catch (e) {
       return Left(ServerFailure());

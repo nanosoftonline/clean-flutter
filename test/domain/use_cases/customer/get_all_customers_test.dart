@@ -34,12 +34,12 @@ void main() {
       )
     ]);
 
-    when(mockCustomerRepository.getAllCustomers()).thenAnswer((_) async => repoResult);
+    when(mockCustomerRepository.getAllCustomers(CustomerType.customer)).thenAnswer((_) async => repoResult);
 
     final result = await usecase.execute();
 
     expect(result, equals(repoResult));
-    verify(mockCustomerRepository.getAllCustomers());
+    verify(mockCustomerRepository.getAllCustomers(CustomerType.customer));
     verifyNoMoreInteractions(mockCustomerRepository);
   });
 }

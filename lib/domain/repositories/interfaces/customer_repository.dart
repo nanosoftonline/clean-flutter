@@ -4,7 +4,7 @@ import 'package:crm/domain/model/customer.dart';
 import "package:dartz/dartz.dart";
 
 abstract class CustomerRepository {
-  Future<Either<Failure, List<Customer>>> getAllCustomers();
+  Future<Either<Failure, List<Customer>>> getAllCustomers(CustomerType customerType);
   Future<Either<Failure, Customer>> getCustomer(String id);
   Future<Either<Failure, Unit>> createCustomer(Customer data);
   Future<Either<Failure, Unit>> deleteCustomer(String id);

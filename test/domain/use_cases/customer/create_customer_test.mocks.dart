@@ -43,11 +43,12 @@ class MockCustomerRepository extends _i1.Mock
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Customer>>> getAllCustomers() =>
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Customer>>> getAllCustomers(
+          _i6.CustomerType? customerType) =>
       (super.noSuchMethod(
         Invocation.method(
           #getAllCustomers,
-          [],
+          [customerType],
         ),
         returnValue:
             _i4.Future<_i2.Either<_i5.Failure, List<_i6.Customer>>>.value(
@@ -55,7 +56,7 @@ class MockCustomerRepository extends _i1.Mock
           this,
           Invocation.method(
             #getAllCustomers,
-            [],
+            [customerType],
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Customer>>>);

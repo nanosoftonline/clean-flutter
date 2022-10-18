@@ -54,24 +54,38 @@ class MockCustomerDataSource extends _i1.Mock
   }
 
   @override
-  _i5.Future<List<_i2.CustomerEntity>> getAll() => (super.noSuchMethod(
+  _i5.Future<List<_i2.CustomerEntity>> find({
+    String? customerName,
+    _i6.CustomerType? type,
+    String? id,
+    String? emailAddress,
+    bool? active,
+  }) =>
+      (super.noSuchMethod(
         Invocation.method(
-          #getAll,
+          #find,
           [],
+          {
+            #customerName: customerName,
+            #type: type,
+            #id: id,
+            #emailAddress: emailAddress,
+            #active: active,
+          },
         ),
         returnValue:
             _i5.Future<List<_i2.CustomerEntity>>.value(<_i2.CustomerEntity>[]),
       ) as _i5.Future<List<_i2.CustomerEntity>>);
   @override
-  _i5.Future<_i2.CustomerEntity> getOne(String? id) => (super.noSuchMethod(
+  _i5.Future<_i2.CustomerEntity> findOne(String? id) => (super.noSuchMethod(
         Invocation.method(
-          #getOne,
+          #findOne,
           [id],
         ),
         returnValue: _i5.Future<_i2.CustomerEntity>.value(_FakeCustomerEntity_0(
           this,
           Invocation.method(
-            #getOne,
+            #findOne,
             [id],
           ),
         )),
