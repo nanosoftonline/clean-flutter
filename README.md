@@ -7,6 +7,8 @@ We'll be using Flutter/Dart
 ### Use Cases of the Application
 Customer Relationship Management (CRM) is a strategy that companies use to manage interactions (or tasks) with customers and potential customers (leads).
 
+A use case, the essence of the application, is a written description of how users will perform tasks in your application. It outlines, from a user's point of view, a system's behavior as it responds to a request.
+
 We'll implement the following use cases:
 ##### Customers
 * Get all customers

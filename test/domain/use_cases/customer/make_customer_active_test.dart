@@ -13,7 +13,7 @@ void main() {
   late CustomerRepository mockCustomerRepository;
   late MakeCustomerActive usecase;
 
-  setUpAll(() {
+  setUp(() {
     mockCustomerRepository = MockCustomerRepository();
     usecase = MakeCustomerActiveImpl(mockCustomerRepository);
   });

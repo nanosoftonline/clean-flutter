@@ -1,34 +1,34 @@
 import 'package:crm/core/error/failures.dart';
 import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
-import 'package:crm/domain/use_cases/customer/make_customer_inactive.dart';
+import 'package:crm/domain/use_cases/lead/delete_lead.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'make_customer_inactive_test.mocks.dart';
+import 'delete_lead_test.mocks.dart';
 
 @GenerateMocks([CustomerRepository])
 void main() {
   late CustomerRepository mockCustomerRepository;
-  late MakeCustomerInActive usecase;
+  late DeleteLead usecase;
   setUp(() {
     mockCustomerRepository = MockCustomerRepository();
-    usecase = MakeCustomerInActiveImpl(mockCustomerRepository);
+    usecase = DeleteLeadImpl(mockCustomerRepository);
   });
 
-  test("should all updateCustomer repo method with customerId and things to change", () async {
+  test("should call the deleteCustomer repo method", () async {
     //arrange
-    const customerId = "1234";
+    const id = "123";
     Either<Failure, Unit> repoResponse = const Right(unit);
-    when(mockCustomerRepository.updateCustomer(customerId, isActive: false)).thenAnswer((_) async => repoResponse);
+    when(mockCustomerRepository.deleteCustomer(id)).thenAnswer((realInvocation) async => repoResponse);
 
     //act
-    final result = await usecase.execute(customerId);
+    final result = await usecase.execute(id);
 
     //assert
     expect(result, equals(repoResponse));
-    verify(mockCustomerRepository.updateCustomer(customerId, isActive: false));
+    verify(mockCustomerRepository.deleteCustomer(id));
     verifyNoMoreInteractions(mockCustomerRepository);
   });
 }
