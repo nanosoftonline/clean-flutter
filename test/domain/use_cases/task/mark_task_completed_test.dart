@@ -1,7 +1,6 @@
 import 'package:crm/core/error/failures.dart';
 import 'package:crm/domain/model/task.dart';
 import 'package:crm/domain/repositories/interfaces/task_repository.dart';
-import 'package:crm/domain/use_cases/task/delete_task.dart';
 import 'package:crm/domain/use_cases/task/mark_task_as_completed.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
