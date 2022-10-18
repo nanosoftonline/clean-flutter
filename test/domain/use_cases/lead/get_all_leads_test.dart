@@ -5,7 +5,6 @@ import 'package:crm/domain/use_cases/lead/get_all_leads.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 
@@ -37,5 +36,7 @@ void main() {
 
     //assert
     expect(result, equals(repoResponse));
+    verify(mockCustomerRepository.getAllCustomers(CustomerType.lead));
+    verifyNoMoreInteractions(mockCustomerRepository);
   });
 }
