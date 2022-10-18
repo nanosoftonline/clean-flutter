@@ -1,11 +1,19 @@
 import 'package:crm/core/error/failures.dart';
 import 'package:crm/domain/model/customer.dart';
+import 'package:crm/domain/model/task.dart';
 
 import "package:dartz/dartz.dart";
 
-abstract class CustomerRepository {
-  Future<Either<Failure, List<Customer>>> getAllCustomers();
-  Future<Either<Failure, void>> createCustomer(Customer data);
-  Future<Either<Failure, void>> deleteCustomer(String id);
-  Future<Either<Failure, void>> updateCustomer(String id, Customer data);
+abstract class TaskRepository {
+  Future<Either<Failure, List<CRMTask>>> getAllTasks();
+  Future<Either<Failure, Unit>> createTask(CRMTask data);
+  Future<Either<Failure, Unit>> deleteTask(String id);
+  Future<Either<Failure, Unit>> updateTask(
+    String id, {
+    Customer? customer,
+    Priority? priority,
+    String? subject,
+    Status? status,
+    DateTime? dueDate,
+  });
 }

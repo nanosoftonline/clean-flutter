@@ -3,7 +3,7 @@ import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class DeleteLead {
-  Future<Either<Failure, void>> execute(String leadId);
+  Future<Either<Failure, Unit>> execute(String leadId);
 }
 
 class DeleteLeadImpl implements DeleteLead {
@@ -11,7 +11,7 @@ class DeleteLeadImpl implements DeleteLead {
   DeleteLeadImpl(this.customerRepository);
 
   @override
-  Future<Either<Failure, void>> execute(String leadId) async {
+  Future<Either<Failure, Unit>> execute(String leadId) async {
     final result = await customerRepository.deleteCustomer(leadId);
     return result;
   }

@@ -181,12 +181,19 @@ import 'package:crm/domain/model/customer.dart';
 import "package:dartz/dartz.dart";
 
 abstract class CustomerRepository {
-  Future<Either<Failure, List<Customer>>> getAllCustomers();
+  Future<Either<Failure, List<Customer>>> getAllCustomers(CustomerType customerType);
   Future<Either<Failure, Customer>> getCustomer(String id);
   Future<Either<Failure, Unit>> createCustomer(Customer data);
   Future<Either<Failure, Unit>> deleteCustomer(String id);
-  Future<Either<Failure, Unit>> updateCustomer(String id, dynamic data);
+  Future<Either<Failure, Unit>> updateCustomer(
+    String id, {
+    String? name,
+    String? email,
+    CustomerType? customerType,
+    bool? isActive,
+  });
 }
+
 
 ```
 
@@ -414,3 +421,7 @@ And this completes the test and production code for "get all customers" use case
 #### The Remaining Use Cases
 
 Using the same process, through TDD we can code up the remaining use cases. please check the [github repo](https://github.com/nanosoftonline/clean-flutter) for the other production code and tests
+
+
+##### Customer Repository
+Moving up the system architecture the next component we need to tackle is the Customer Repository

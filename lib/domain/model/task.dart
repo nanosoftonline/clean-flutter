@@ -1,10 +1,11 @@
 import 'package:crm/domain/model/customer.dart';
+import 'package:equatable/equatable.dart';
 
 enum Status { notStarted, deferred, inProgress, completed, waitingForInput }
 
 enum Priority { low, normal, high }
 
-class Task {
+class CRMTask extends Equatable {
   final String id;
   final Customer customer;
   final Priority priority;
@@ -12,7 +13,7 @@ class Task {
   final Status status;
   final DateTime dueDate;
 
-  const Task({
+  const CRMTask({
     required this.id,
     required this.customer,
     this.priority = Priority.high,
@@ -20,4 +21,8 @@ class Task {
     required this.subject,
     required this.dueDate,
   });
+  @override
+  List<Object> get props {
+    return [id, customer, priority, subject, dueDate];
+  }
 }
