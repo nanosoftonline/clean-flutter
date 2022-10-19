@@ -190,7 +190,6 @@ void main() {
     test("should return Failure when data source throws", () async {
       //arrange
       const customerId = "123";
-      Either<Failure, Unit> expected = const Right<Failure, Unit>(unit);
       when(mockDS.update(customerId, customerName: "Jim")).thenThrow(ServerFailure());
 
       //act
