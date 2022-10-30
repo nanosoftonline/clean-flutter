@@ -4,6 +4,7 @@ import 'package:crm/domain/model/customer.dart';
 import 'package:crm/core/error/failures.dart';
 import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 
 class CustomerRepositoryImpl implements CustomerRepository {
   CustomerDataSource customerDataSource;
@@ -21,6 +22,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
       ));
       return Right(result);
     } catch (e) {
+      debugPrint(e.toString());
       return Left(ServerFailure());
     }
   }
@@ -47,6 +49,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
               ))
           .toList());
     } catch (e) {
+      debugPrint(e.toString());
       return Left(ServerFailure());
     }
   }

@@ -1,10 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 enum CustomerType {
   lead,
   customer,
 }
 
+@immutable
 class Customer extends Equatable {
   final String id;
   final String name;

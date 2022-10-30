@@ -12,6 +12,7 @@ dependencies:
   dio: ^4.0.6
   uuid: ^3.0.6
   dartz: ^0.10.1
+  flutter_hooks: ^0.18.5+1
 dev_dependencies:
   flutter_test:
     sdk: flutter
