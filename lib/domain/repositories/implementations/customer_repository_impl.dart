@@ -74,7 +74,12 @@ class CustomerRepositoryImpl implements CustomerRepository {
   Future<Either<Failure, Customer>> getCustomer(String id) async {
     try {
       final result = await customerDataSource.findOne(id);
-      return Right(Customer(id: result.id, email: result.emailAddress, name: result.customerName));
+      return Right(Customer(
+        id: result.id,
+        email: result.emailAddress,
+        name: result.customerName,
+        isActive: result.active,
+      ));
     } catch (e) {
       return Left(ServerFailure());
     }

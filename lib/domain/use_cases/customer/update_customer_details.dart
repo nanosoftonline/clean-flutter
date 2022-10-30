@@ -3,7 +3,7 @@ import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class UpdateCustomer {
-  Future<Either<Failure, Unit>> execute(String customerId, {String? name, String? email});
+  Future<Either<Failure, Unit>> execute(String customerId, {String? name, String? email, bool? isActive});
 }
 
 class UpdateCustomerImpl implements UpdateCustomer {
@@ -11,8 +11,8 @@ class UpdateCustomerImpl implements UpdateCustomer {
   UpdateCustomerImpl(this.customerRepository);
 
   @override
-  Future<Either<Failure, Unit>> execute(String customerId, {String? name, String? email}) async {
-    final result = await customerRepository.updateCustomer(customerId, name: name, email: email);
+  Future<Either<Failure, Unit>> execute(String customerId, {String? name, String? email, bool? isActive}) async {
+    final result = await customerRepository.updateCustomer(customerId, name: name, email: email, isActive: isActive);
     return result;
   }
 }

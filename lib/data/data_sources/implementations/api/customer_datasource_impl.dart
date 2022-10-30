@@ -48,10 +48,10 @@ class CustomerDataSourceImpl implements CustomerDataSource {
   Future<CustomerEntity> findOne(String id) async {
     var response = await Dio().get("$API_BASE/customers/$id");
     CustomerEntity customer = CustomerEntity(
-      id: response.data["id"],
-      customerName: response.data["customerName"],
-      emailAddress: response.data["emailAddress"],
-    );
+        id: response.data["id"],
+        customerName: response.data["customerName"],
+        emailAddress: response.data["emailAddress"],
+        active: response.data["isActive"]);
     return customer;
   }
 
