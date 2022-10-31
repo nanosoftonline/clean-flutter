@@ -6,10 +6,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-
-import 'list_viewmodel_test.mocks.dart';
+import 'package:mocktail/mocktail.dart';
 
 class TestWidget extends HookWidget {
   const TestWidget(this.vm, {super.key});
@@ -32,7 +29,8 @@ class TestWidget extends HookWidget {
   }
 }
 
-@GenerateMocks([GetAllCustomers])
+class MockGetAllCustomers extends Mock implements GetAllCustomers {}
+
 void main() {
   late GetAllCustomers mockGetAllCustomersUseCase;
 
@@ -42,7 +40,7 @@ void main() {
 
   testWidgets("should return data from use case", (WidgetTester tester) async {
     //arrange
-    var useCaseResult = const Right<Failure, List<Customer>>([
+    const useCaseResult = Right<Failure, List<Customer>>([
       Customer(
         id: "123",
         email: "john@company.com",
@@ -55,7 +53,7 @@ void main() {
       )
     ]);
 
-    when(mockGetAllCustomersUseCase.execute()).thenAnswer((_) async => useCaseResult);
+    when(() => mockGetAllCustomersUseCase.execute()).thenAnswer((_) async => useCaseResult);
     //act
     await tester.pumpWidget(HookBuilder(builder: (context) {
       final viewModel = useCustomerListViewModel(getAllCustomers: mockGetAllCustomersUseCase);
@@ -72,7 +70,7 @@ void main() {
   testWidgets("should return error message ", (WidgetTester tester) async {
     //arrange
     Either<Failure, List<Customer>> useCaseResult = Left(ServerFailure());
-    when(mockGetAllCustomersUseCase.execute()).thenAnswer((_) async => useCaseResult);
+    when(() => mockGetAllCustomersUseCase.execute()).thenAnswer((_) async => useCaseResult);
 
     //act
     await tester.pumpWidget(HookBuilder(builder: (context) {

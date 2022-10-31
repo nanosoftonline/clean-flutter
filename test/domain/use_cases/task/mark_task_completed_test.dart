@@ -4,11 +4,10 @@ import 'package:crm/domain/repositories/interfaces/task_repository.dart';
 import 'package:crm/domain/use_cases/task/mark_task_as_completed.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-import 'mark_task_completed_test.mocks.dart';
+import 'package:mocktail/mocktail.dart';
 
-@GenerateMocks([TaskRepository])
+class MockTaskRepository extends Mock implements TaskRepository {}
+
 void main() {
   late TaskRepository mockTaskRepository;
   late MarkTaskAsComplete usecase;
@@ -22,7 +21,7 @@ void main() {
     //arrange
     const id = "1001";
     Either<Failure, Unit> repoResponse = const Right(unit);
-    when(mockTaskRepository.updateTask(id, status: Status.completed))
+    when(() => mockTaskRepository.updateTask(id, status: Status.completed))
         .thenAnswer((realInvocation) async => repoResponse);
 
     //act
@@ -30,7 +29,7 @@ void main() {
 
     //assert
     expect(result, equals(repoResponse));
-    verify(mockTaskRepository.updateTask(id, status: Status.completed));
+    verify(() => mockTaskRepository.updateTask(id, status: Status.completed));
     verifyNoMoreInteractions(mockTaskRepository);
   });
 }

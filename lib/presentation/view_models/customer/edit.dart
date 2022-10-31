@@ -7,8 +7,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class CustomerEditViewModel {
   Customer data;
   String error;
-  Function fetchCustomerData;
-  Function saveCustomerData;
+  Function(String id) fetchCustomerData;
+  Function({String name, String? email, bool? isActive}) saveCustomerData;
   CustomerEditViewModel({
     required this.data,
     required this.fetchCustomerData,
@@ -17,8 +17,10 @@ class CustomerEditViewModel {
   });
 }
 
-CustomerEditViewModel useCustomerEditViewModel(
-    {required GetCustomer getCustomer, required UpdateCustomer updateCustomer}) {
+CustomerEditViewModel useCustomerEditViewModel({
+  required GetCustomer getCustomer,
+  required UpdateCustomer updateCustomer,
+}) {
   final customer = useState<Customer>(const Customer(id: "", name: "", email: ""));
   final error = useState<String>("");
 
@@ -34,12 +36,17 @@ CustomerEditViewModel useCustomerEditViewModel(
   }
 
   void saveCustomerData({String? name, String? email, bool? isActive}) async {
-    await updateCustomer.execute(
+    var result = await updateCustomer.execute(
       customer.value.id,
       name: name != customer.value.name ? name : null,
       email: email != customer.value.email ? email : null,
       isActive: isActive != customer.value.isActive ? isActive : null,
     );
+    result.fold((failure) {
+      if (failure == ServerFailure()) {
+        error.value = "Error Saving Customer Data!";
+      }
+    }, (data) {});
   }
 
   return CustomerEditViewModel(

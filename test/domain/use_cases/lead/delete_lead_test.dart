@@ -3,12 +3,10 @@ import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
 import 'package:crm/domain/use_cases/lead/delete_lead.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'delete_lead_test.mocks.dart';
+class MockCustomerRepository extends Mock implements CustomerRepository {}
 
-@GenerateMocks([CustomerRepository])
 void main() {
   late CustomerRepository mockCustomerRepository;
   late DeleteLead usecase;
@@ -21,14 +19,14 @@ void main() {
     //arrange
     const id = "123";
     Either<Failure, Unit> repoResponse = const Right(unit);
-    when(mockCustomerRepository.deleteCustomer(id)).thenAnswer((realInvocation) async => repoResponse);
+    when(() => mockCustomerRepository.deleteCustomer(id)).thenAnswer((realInvocation) async => repoResponse);
 
     //act
     final result = await usecase.execute(id);
 
     //assert
     expect(result, equals(repoResponse));
-    verify(mockCustomerRepository.deleteCustomer(id));
+    verify(() => mockCustomerRepository.deleteCustomer(id));
     verifyNoMoreInteractions(mockCustomerRepository);
   });
 }

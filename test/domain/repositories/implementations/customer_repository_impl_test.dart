@@ -6,13 +6,10 @@ import 'package:crm/domain/repositories/implementations/customer_repository_impl
 import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-import "package:collection/collection.dart";
+import 'package:mocktail/mocktail.dart';
 
-import 'customer_repository_impl_test.mocks.dart';
+class MockCustomerDataSource extends Mock implements CustomerDataSource {}
 
-@GenerateMocks([CustomerDataSource])
 void main() {
   late CustomerDataSource mockDS;
   late CustomerRepository customerRepository;
@@ -40,7 +37,7 @@ void main() {
         )
       ];
 
-      when(mockDS.find(type: CustomerType.customer)).thenAnswer((_) async => dsResponse);
+      when(() => mockDS.find(type: CustomerType.customer)).thenAnswer((_) async => dsResponse);
 
       //act
       final result = await customerRepository.getAllCustomers(CustomerType.customer);
@@ -54,7 +51,7 @@ void main() {
     test("should return Failure when data source throws", () async {
       //arrange
       Either<Failure, List<Customer>> expected = Left(ServerFailure());
-      when(mockDS.find(type: CustomerType.lead)).thenThrow(ServerFailure());
+      when(() => mockDS.find(type: CustomerType.lead)).thenThrow(ServerFailure());
 
       //act
       final result = await customerRepository.getAllCustomers(CustomerType.customer);
@@ -78,7 +75,7 @@ void main() {
         email: "paul@nanosoft.co.za",
       ));
       const customerId = "123";
-      when(mockDS.findOne(customerId)).thenAnswer((_) async => dsResponse);
+      when(() => mockDS.findOne(customerId)).thenAnswer((_) async => dsResponse);
 
       //act
       final result = await customerRepository.getCustomer(customerId);
@@ -91,7 +88,7 @@ void main() {
       //arrange
       Either<Failure, Customer> expected = Left(ServerFailure());
       const customerId = "123";
-      when(mockDS.findOne(customerId)).thenThrow(ServerFailure());
+      when(() => mockDS.findOne(customerId)).thenThrow(ServerFailure());
 
       //act
       final result = await customerRepository.getCustomer(customerId);
@@ -110,13 +107,13 @@ void main() {
         name: "John",
       );
       Either<Failure, Unit> expected = const Right<Failure, Unit>(unit);
-      when(mockDS.create(const CustomerEntity(
-        id: "123",
-        emailAddress: "john@gmail.com",
-        customerName: "John",
-        active: true,
-        type: CustomerType.customer,
-      ))).thenAnswer((_) async => unit);
+      when(() => mockDS.create(const CustomerEntity(
+            id: "123",
+            emailAddress: "john@gmail.com",
+            customerName: "John",
+            active: true,
+            type: CustomerType.customer,
+          ))).thenAnswer((_) async => unit);
 
       //act
       final result = await customerRepository.createCustomer(customer);
@@ -128,13 +125,13 @@ void main() {
     test("should return Failure when data source throws", () async {
       //arrange
       const customer = Customer(id: "123", email: "john@gmail.com", name: "John");
-      when(mockDS.create(const CustomerEntity(
-        id: "123",
-        emailAddress: "john@gmail.com",
-        customerName: "John",
-        active: true,
-        type: CustomerType.customer,
-      ))).thenThrow(ServerFailure());
+      when(() => mockDS.create(const CustomerEntity(
+            id: "123",
+            emailAddress: "john@gmail.com",
+            customerName: "John",
+            active: true,
+            type: CustomerType.customer,
+          ))).thenThrow(ServerFailure());
 
       //act
       final result = await customerRepository.createCustomer(customer);
@@ -149,7 +146,7 @@ void main() {
       //arrange
       const customerId = "123";
       Either<Failure, Unit> expected = const Right<Failure, Unit>(unit);
-      when(mockDS.delete(customerId)).thenAnswer((_) async => unit);
+      when(() => mockDS.delete(customerId)).thenAnswer((_) async => unit);
 
       //act
       final result = await customerRepository.deleteCustomer(customerId);
@@ -161,7 +158,7 @@ void main() {
     test("should return Failure when data source throws", () async {
       //arrange
       const customerId = "123";
-      when(mockDS.delete(customerId)).thenThrow(ServerFailure());
+      when(() => mockDS.delete(customerId)).thenThrow(ServerFailure());
 
       //act
       final result = await customerRepository.deleteCustomer(customerId);
@@ -176,21 +173,21 @@ void main() {
       //arrange
       const customerId = "123";
       Either<Failure, Unit> expected = const Right<Failure, Unit>(unit);
-      when(mockDS.update(customerId, customerName: "Jim")).thenAnswer((_) async => unit);
+      when(() => mockDS.update(customerId, customerName: "Jim")).thenAnswer((_) async => unit);
 
       //act
       final result = await customerRepository.updateCustomer(customerId, name: "Jim");
 
       //assert
       expect(result, equals(expected));
-      verify(mockDS.update(customerId, customerName: "Jim"));
+      verify(() => mockDS.update(customerId, customerName: "Jim"));
       verifyNoMoreInteractions(mockDS);
     });
 
     test("should return Failure when data source throws", () async {
       //arrange
       const customerId = "123";
-      when(mockDS.update(customerId, customerName: "Jim")).thenThrow(ServerFailure());
+      when(() => mockDS.update(customerId, customerName: "Jim")).thenThrow(ServerFailure());
 
       //act
       final result = await customerRepository.updateCustomer(customerId, name: "Jim");

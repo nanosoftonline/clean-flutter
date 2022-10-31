@@ -3,12 +3,10 @@ import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
 import 'package:crm/domain/use_cases/customer/update_customer_details.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'update_customer_test.mocks.dart';
+class MockCustomerRepository extends Mock implements CustomerRepository {}
 
-@GenerateMocks([CustomerRepository])
 void main() {
   late CustomerRepository mockCustomerRepository;
   late UpdateCustomer usecase;
@@ -21,7 +19,7 @@ void main() {
     //arrange
     const customerId = "123";
     Either<Failure, Unit> repoResponse = Right(unit);
-    when(mockCustomerRepository.updateCustomer(customerId, name: "Jim"))
+    when(() => mockCustomerRepository.updateCustomer(customerId, name: "Jim"))
         .thenAnswer((realInvocation) async => repoResponse);
 
     //act
@@ -29,7 +27,7 @@ void main() {
 
     //assert
     expect(result, equals(repoResponse));
-    verify(mockCustomerRepository.updateCustomer(customerId, name: "Jim"));
+    verify(() => mockCustomerRepository.updateCustomer(customerId, name: "Jim"));
     verifyNoMoreInteractions(mockCustomerRepository);
   });
 }

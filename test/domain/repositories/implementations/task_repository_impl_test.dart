@@ -6,13 +6,11 @@ import 'package:crm/domain/model/task.dart';
 import 'package:crm/domain/repositories/implementations/task_repository_impl.dart';
 import 'package:crm/domain/repositories/interfaces/task_repository.dart';
 import 'package:dartz/dartz.dart';
-import 'package:mockito/annotations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'task_repository_impl_test.mocks.dart';
+class MockTaskDataSource extends Mock implements TaskDataSource {}
 
-@GenerateMocks([TaskDataSource])
 void main() {
   late TaskDataSource mockDS;
   late TaskRepository repo;
@@ -34,14 +32,14 @@ void main() {
           subject: task.subject,
           dueDate: task.dueDate,
         );
-        when(mockDS.create(taskEntity)).thenAnswer((realInvocation) async => unit);
+        when(() => mockDS.create(taskEntity)).thenAnswer((realInvocation) async => unit);
 
         //act
         final result = await repo.createTask(task);
 
         //assert
         expect(result, equals(const Right(unit)));
-        verify(mockDS.create(taskEntity));
+        verify(() => mockDS.create(taskEntity));
         verifyNoMoreInteractions(mockDS);
       });
 
@@ -55,14 +53,14 @@ void main() {
           subject: task.subject,
           dueDate: task.dueDate,
         );
-        when(mockDS.create(taskEntity)).thenThrow(ServerFailure());
+        when(() => mockDS.create(taskEntity)).thenThrow(ServerFailure());
 
         //act
         final result = await repo.createTask(task);
 
         //assert
         expect(result, equals(Left(ServerFailure())));
-        verify(mockDS.create(taskEntity));
+        verify(() => mockDS.create(taskEntity));
         verifyNoMoreInteractions(mockDS);
       });
     });
@@ -71,14 +69,14 @@ void main() {
       test("should call delete method of data source", () async {
         //arrange
         var id = "1001";
-        when(mockDS.delete(id)).thenAnswer((_) async => unit);
+        when(() => mockDS.delete(id)).thenAnswer((_) async => unit);
 
         //act
         final result = await repo.deleteTask(id);
 
         //assert
         expect(result, equals(const Right(unit)));
-        verify(mockDS.delete(id));
+        verify(() => mockDS.delete(id));
         verifyNoMoreInteractions(mockDS);
       });
 
@@ -86,14 +84,14 @@ void main() {
         //arrange
         //arrange
         var id = "1001";
-        when(mockDS.delete(id)).thenThrow(ServerFailure());
+        when(() => mockDS.delete(id)).thenThrow(ServerFailure());
 
         //act
         final result = await repo.deleteTask(id);
 
         //assert
         expect(result, equals(Left(ServerFailure())));
-        verify(mockDS.delete(id));
+        verify(() => mockDS.delete(id));
         verifyNoMoreInteractions(mockDS);
       });
     });
@@ -118,7 +116,7 @@ void main() {
             dueDate: DateTime.now(),
           )
         ];
-        when(mockDS.find()).thenAnswer((_) async => dsResponse);
+        when(() => mockDS.find()).thenAnswer((_) async => dsResponse);
 
         //act
         final result = await repo.getAllTasks();
@@ -127,20 +125,20 @@ void main() {
         List<CRMTask> resultList = List<CRMTask>.empty();
         result.fold((l) => {}, (r) => {resultList = expected});
         expect(resultList, equals(expected));
-        verify(mockDS.find());
+        verify(() => mockDS.find());
         verifyNoMoreInteractions(mockDS);
       });
 
       test("should return Failure when data source throws", () async {
         //arrange
-        when(mockDS.find()).thenThrow(ServerFailure());
+        when(() => mockDS.find()).thenThrow(ServerFailure());
 
         //act
         final result = await repo.getAllTasks();
 
         //assert
         expect(result, equals(Left(ServerFailure())));
-        verify(mockDS.find());
+        verify(() => mockDS.find());
         verifyNoMoreInteractions(mockDS);
       });
     });
@@ -151,14 +149,14 @@ void main() {
         const taskId = "1001";
         Either<Failure, Unit> expected = const Right<Failure, Unit>(unit);
         const updatedSubject = "Changed Meeting Name";
-        when(mockDS.update(taskId, subject: updatedSubject)).thenAnswer((_) async => unit);
+        when(() => mockDS.update(taskId, subject: updatedSubject)).thenAnswer((_) async => unit);
 
         //act
         final result = await repo.updateTask(taskId, subject: updatedSubject);
 
         //assert
         expect(result, equals(expected));
-        verify(mockDS.update(taskId, subject: updatedSubject));
+        verify(() => mockDS.update(taskId, subject: updatedSubject));
         verifyNoMoreInteractions(mockDS);
       });
 
@@ -166,14 +164,14 @@ void main() {
         //arrange
         const taskId = "1001";
         const updatedSubject = "Changed Meeting Name";
-        when(mockDS.update(taskId, subject: updatedSubject)).thenThrow(ServerFailure());
+        when(() => mockDS.update(taskId, subject: updatedSubject)).thenThrow(ServerFailure());
 
         //act
         final result = await repo.updateTask(taskId, subject: updatedSubject);
 
         //assert
         expect(result, equals(Left(ServerFailure())));
-        verify(mockDS.update(taskId, subject: updatedSubject));
+        verify(() => mockDS.update(taskId, subject: updatedSubject));
         verifyNoMoreInteractions(mockDS);
       });
     });

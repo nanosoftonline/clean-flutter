@@ -22,6 +22,19 @@ class Customer extends Equatable {
     this.customerType = CustomerType.customer,
   });
 
+  dynamic toJson() => {
+        'id': id,
+        'name': name,
+        'email': email,
+        'isActive': isActive,
+        "customerType": customerType,
+      };
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
   @override
   List<Object> get props {
     return [id, name, email, isActive, customerType];

@@ -4,11 +4,10 @@ import 'package:crm/domain/repositories/interfaces/customer_repository.dart';
 import 'package:crm/domain/use_cases/lead/create_lead.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-import 'create_lead_test.mocks.dart';
+import 'package:mocktail/mocktail.dart';
 
-@GenerateMocks([CustomerRepository])
+class MockCustomerRepository extends Mock implements CustomerRepository {}
+
 void main() {
   late CustomerRepository mockCustomerRepository;
   late CreateLead usecase;
@@ -26,14 +25,14 @@ void main() {
       customerType: CustomerType.lead,
     );
     Either<Failure, Unit> repoResponse = const Right(unit);
-    when(mockCustomerRepository.createCustomer(customer)).thenAnswer((realInvocation) async => repoResponse);
+    when(() => mockCustomerRepository.createCustomer(customer)).thenAnswer((realInvocation) async => repoResponse);
 
     //act
     final result = await usecase.execute(customer);
 
     //assert
     expect(result, equals(repoResponse));
-    verify(mockCustomerRepository.createCustomer(customer));
+    verify(() => mockCustomerRepository.createCustomer(customer));
     verifyNoMoreInteractions(mockCustomerRepository);
   });
 }

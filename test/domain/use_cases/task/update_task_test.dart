@@ -4,11 +4,10 @@ import 'package:crm/domain/repositories/interfaces/task_repository.dart';
 import 'package:crm/domain/use_cases/task/update_task.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-import 'update_task_test.mocks.dart';
+import 'package:mocktail/mocktail.dart';
 
-@GenerateMocks([TaskRepository])
+class MockTaskRepository extends Mock implements TaskRepository {}
+
 void main() {
   late TaskRepository mockTaskRepository;
   late UpdateTask usecase;
@@ -22,14 +21,15 @@ void main() {
     //arrange
     const id = "1001";
     Either<Failure, Unit> repoResponse = const Right(unit);
-    when(mockTaskRepository.updateTask(id, priority: Priority.high)).thenAnswer((realInvocation) async => repoResponse);
+    when(() => mockTaskRepository.updateTask(id, priority: Priority.high))
+        .thenAnswer((realInvocation) async => repoResponse);
 
     //act
     final result = await usecase.execute(id, priority: Priority.high);
 
     //assert
     expect(result, equals(repoResponse));
-    verify(mockTaskRepository.updateTask(id, priority: Priority.high));
+    verify(() => mockTaskRepository.updateTask(id, priority: Priority.high));
     verifyNoMoreInteractions(mockTaskRepository);
   });
 }
