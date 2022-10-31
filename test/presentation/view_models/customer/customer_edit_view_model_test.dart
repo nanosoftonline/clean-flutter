@@ -56,11 +56,11 @@ void main() {
 
   testWidgets("should call fetchCustomerData and update state", (tester) async {
     //arrange
-    Either<Failure, Customer> useCaseResult =
-        const Right<Failure, Customer>(Customer(id: "123", name: "John", email: "john@email.com"));
-    when(() => mockGetCustomerUseCase.execute("123")).thenAnswer((_) async => useCaseResult);
+    const expected = Customer(id: "123", name: "John", email: "john@email.com");
+    Either<Failure, Customer> useCaseResult = const Right(expected);
+    when(() => mockGetCustomerUseCase.execute(expected.id)).thenAnswer((_) async => useCaseResult);
 
-    when(() => mockUpdateCustomerUseCase.execute("123", name: "Test Name", email: "test@email.com"))
+    when(() => mockUpdateCustomerUseCase.execute(expected.id, name: "Test Name", email: "test@email.com"))
         .thenAnswer((_) async => const Right(unit));
 
     //act
@@ -73,18 +73,17 @@ void main() {
     }));
 
     //assert Fetch
-    expect(find.text("{id: , name: , email: , isActive: true, customerType: CustomerType.customer}"), findsOneWidget);
     await tester.tap(find.text("FetchCustomerData"));
     await tester.pump();
     expect(
-      find.text('{id: 123, name: John, email: john@email.com, isActive: true, customerType: CustomerType.customer}'),
+      find.text(expected.toString()),
       findsOneWidget,
     );
 
     //assert save
     await tester.tap(find.text("SaveCustomerData"));
     await tester.pump();
-    verify(() => mockUpdateCustomerUseCase.execute("123", name: "Test Name", email: "test@email.com"));
+    verify(() => mockUpdateCustomerUseCase.execute(expected.id, name: "Test Name", email: "test@email.com"));
   });
 
   testWidgets("should set Error message if getCustomer fails", (tester) async {
@@ -101,7 +100,6 @@ void main() {
     }));
 
     //assert Fetch
-    expect(find.text("{id: , name: , email: , isActive: true, customerType: CustomerType.customer}"), findsOneWidget);
     await tester.tap(find.text("FetchCustomerData"));
     await tester.pump();
     expect(
@@ -112,11 +110,11 @@ void main() {
 
   testWidgets("should set Error message if updateCustomer fails", (tester) async {
     //arrange
-    Either<Failure, Customer> useCaseResult =
-        const Right<Failure, Customer>(Customer(id: "123", name: "John", email: "john@email.com"));
-    when(() => mockGetCustomerUseCase.execute("123")).thenAnswer((_) async => useCaseResult);
+    const expected = Customer(id: "123", name: "John", email: "john@email.com");
+    Either<Failure, Customer> useCaseResult = const Right(expected);
+    when(() => mockGetCustomerUseCase.execute(expected.id)).thenAnswer((_) async => useCaseResult);
 
-    when(() => mockUpdateCustomerUseCase.execute("123", name: "Test Name", email: "test@email.com"))
+    when(() => mockUpdateCustomerUseCase.execute(expected.id, name: "Test Name", email: "test@email.com"))
         .thenAnswer((_) async => Left(ServerFailure()));
 
     //act
@@ -129,11 +127,10 @@ void main() {
     }));
 
     //assert Fetch
-    expect(find.text("{id: , name: , email: , isActive: true, customerType: CustomerType.customer}"), findsOneWidget);
     await tester.tap(find.text("FetchCustomerData"));
     await tester.pump();
     expect(
-      find.text('{id: 123, name: John, email: john@email.com, isActive: true, customerType: CustomerType.customer}'),
+      find.text(expected.toString()),
       findsOneWidget,
     );
 
