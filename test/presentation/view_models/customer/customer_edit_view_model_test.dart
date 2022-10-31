@@ -58,9 +58,9 @@ void main() {
     //arrange
     const expected = Customer(id: "123", name: "John", email: "john@email.com");
     Either<Failure, Customer> useCaseResult = const Right(expected);
-    when(() => mockGetCustomerUseCase.execute(expected.id)).thenAnswer((_) async => useCaseResult);
+    when(() => mockGetCustomerUseCase.execute(expected.id!)).thenAnswer((_) async => useCaseResult);
 
-    when(() => mockUpdateCustomerUseCase.execute(expected.id, name: "Test Name", email: "test@email.com"))
+    when(() => mockUpdateCustomerUseCase.execute(expected.id!, name: "Test Name", email: "test@email.com"))
         .thenAnswer((_) async => const Right(unit));
 
     //act
@@ -83,7 +83,7 @@ void main() {
     //assert save
     await tester.tap(find.text("SaveCustomerData"));
     await tester.pump();
-    verify(() => mockUpdateCustomerUseCase.execute(expected.id, name: "Test Name", email: "test@email.com"));
+    verify(() => mockUpdateCustomerUseCase.execute(expected.id!, name: "Test Name", email: "test@email.com"));
   });
 
   testWidgets("should set Error message if getCustomer fails", (tester) async {
@@ -112,9 +112,9 @@ void main() {
     //arrange
     const expected = Customer(id: "123", name: "John", email: "john@email.com");
     Either<Failure, Customer> useCaseResult = const Right(expected);
-    when(() => mockGetCustomerUseCase.execute(expected.id)).thenAnswer((_) async => useCaseResult);
+    when(() => mockGetCustomerUseCase.execute(expected.id!)).thenAnswer((_) async => useCaseResult);
 
-    when(() => mockUpdateCustomerUseCase.execute(expected.id, name: "Test Name", email: "test@email.com"))
+    when(() => mockUpdateCustomerUseCase.execute(expected.id!, name: "Test Name", email: "test@email.com"))
         .thenAnswer((_) async => Left(ServerFailure()));
 
     //act

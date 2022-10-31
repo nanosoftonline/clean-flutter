@@ -49,7 +49,7 @@ class CustomerList extends HookWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CustomerEdit(vm.data[index].id)),
+                        MaterialPageRoute(builder: (context) => CustomerEdit(vm.data[index].id!)),
                       ).then((value) {
                         vm.fetchData();
                       });

@@ -8,14 +8,14 @@ enum CustomerType {
 
 @immutable
 class Customer extends Equatable {
-  final String id;
+  final String? id;
   final String name;
   final String email;
   final CustomerType customerType;
   final bool isActive;
 
   const Customer({
-    required this.id,
+    this.id,
     required this.name,
     required this.email,
     this.isActive = true,
@@ -37,6 +37,6 @@ class Customer extends Equatable {
 
   @override
   List<Object> get props {
-    return [id, name, email, isActive, customerType];
+    return [name, email, isActive, customerType];
   }
 }

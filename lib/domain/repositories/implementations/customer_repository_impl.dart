@@ -14,7 +14,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
   Future<Either<Failure, Unit>> createCustomer(Customer data) async {
     try {
       final result = await customerDataSource.create(CustomerEntity(
-        id: data.id,
+        id: data.id!,
         customerName: data.name,
         emailAddress: data.email,
         active: data.isActive,

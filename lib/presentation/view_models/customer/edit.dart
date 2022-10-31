@@ -37,7 +37,7 @@ CustomerEditViewModel useCustomerEditViewModel({
 
   void saveCustomerData({String? name, String? email, bool? isActive}) async {
     var result = await updateCustomer.execute(
-      customer.value.id,
+      customer.value.id!,
       name: name != customer.value.name ? name : null,
       email: email != customer.value.email ? email : null,
       isActive: isActive != customer.value.isActive ? isActive : null,
