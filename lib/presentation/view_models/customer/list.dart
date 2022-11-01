@@ -15,6 +15,7 @@ CustomerListViewModel useCustomerListViewModel({required GetAllCustomers getAllC
   final error = useState<String>("");
 
   void fetchData() async {
+    error.value = "";
     var result = await getAllCustomers.execute();
     result.fold((failure) {
       if (failure == ServerFailure()) {

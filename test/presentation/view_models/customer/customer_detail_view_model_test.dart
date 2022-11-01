@@ -1,5 +1,6 @@
 import 'package:crm/core/error/failures.dart';
 import 'package:crm/domain/model/customer.dart';
+import 'package:crm/domain/use_cases/customer/delete_customer.dart';
 import 'package:crm/domain/use_cases/customer/get_customer.dart';
 import 'package:crm/presentation/view_models/customer/detail.dart';
 import 'package:dartz/dartz.dart';
@@ -22,7 +23,13 @@ class TestWidget extends HookWidget {
           onPressed: () {
             vm.fetchCustomerData("123");
           },
-          child: const Text("FetchCustomerData"),
+          child: const Text("Get Customer"),
+        ),
+        TextButton(
+          onPressed: () {
+            vm.deleteCustomer("123");
+          },
+          child: const Text("Delete Customer"),
         ),
       ],
     );
@@ -31,10 +38,14 @@ class TestWidget extends HookWidget {
 
 class MockGetCustomer extends Mock implements GetCustomer {}
 
+class MockDeleteCustomer extends Mock implements DeleteCustomer {}
+
 void main() {
   late GetCustomer mockGetCustomerUseCase;
+  late DeleteCustomer mockDeleteCustomerUseCase;
   setUp(() {
     mockGetCustomerUseCase = MockGetCustomer();
+    mockDeleteCustomerUseCase = MockDeleteCustomer();
   });
 
   testWidgets("should call getCustomer", (tester) async {
@@ -45,12 +56,15 @@ void main() {
 
     //act
     await tester.pumpWidget(HookBuilder(builder: (context) {
-      final viewModel = useCustomerDetailViewModel(getCustomer: mockGetCustomerUseCase);
+      final viewModel = useCustomerDetailViewModel(
+        getCustomerUseCase: mockGetCustomerUseCase,
+        deleteCustomerUseCase: mockDeleteCustomerUseCase,
+      );
       return MaterialApp(home: TestWidget(viewModel));
     }));
 
     //assert Fetch
-    await tester.tap(find.text("FetchCustomerData"));
+    await tester.tap(find.text("Get Customer"));
     await tester.pump();
     verify(() => mockGetCustomerUseCase.execute(expected.id!));
   });
@@ -61,12 +75,15 @@ void main() {
 
     //act
     await tester.pumpWidget(HookBuilder(builder: (context) {
-      final viewModel = useCustomerDetailViewModel(getCustomer: mockGetCustomerUseCase);
+      final viewModel = useCustomerDetailViewModel(
+        getCustomerUseCase: mockGetCustomerUseCase,
+        deleteCustomerUseCase: mockDeleteCustomerUseCase,
+      );
       return MaterialApp(home: TestWidget(viewModel));
     }));
 
     //assert Fetch
-    await tester.tap(find.text("FetchCustomerData"));
+    await tester.tap(find.text("Get Customer"));
     await tester.pump();
     expect(
       find.text('Error Fetching Customer!'),
