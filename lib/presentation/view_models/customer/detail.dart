@@ -25,6 +25,7 @@ CustomerDetailViewModel useCustomerDetailViewModel({
   final error = useState<String>("");
 
   void fetchCustomerData(String id) async {
+    error.value = "";
     var result = await getCustomerUseCase.execute(id);
     result.fold((failure) {
       if (failure == ServerFailure()) {
@@ -36,6 +37,7 @@ CustomerDetailViewModel useCustomerDetailViewModel({
   }
 
   void deleteCustomer(String id) async {
+    error.value = "";
     var result = await deleteCustomerUseCase.execute(id);
     result.fold((failure) {
       if (failure == ServerFailure()) {

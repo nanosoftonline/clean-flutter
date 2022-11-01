@@ -3,31 +3,9 @@ import 'package:crm/domain/model/customer.dart';
 import 'package:crm/domain/use_cases/customer/get_all_customers.dart';
 import 'package:crm/presentation/view_models/customer/list.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-
-class TestWidget extends HookWidget {
-  const TestWidget(this.vm, {super.key});
-  final CustomerListViewModel vm;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(vm.data.length.toString()),
-        Text(vm.error),
-        TextButton(
-          onPressed: () {
-            vm.fetchData();
-          },
-          child: const Text("Fetch Data"),
-        )
-      ],
-    );
-  }
-}
+import 'package:flutter_hooks_test/flutter_hooks_test.dart';
 
 class MockGetAllCustomers extends Mock implements GetAllCustomers {}
 
@@ -54,34 +32,27 @@ void main() {
     ]);
 
     when(() => mockGetAllCustomersUseCase.execute()).thenAnswer((_) async => useCaseResult);
+    final result = await buildHook((_) => useCustomerListViewModel(getAllCustomers: mockGetAllCustomersUseCase));
+
     //act
-    await tester.pumpWidget(HookBuilder(builder: (context) {
-      final viewModel = useCustomerListViewModel(getAllCustomers: mockGetAllCustomersUseCase);
-      return MaterialApp(home: TestWidget(viewModel));
-    }));
+    await act(() => result.current.fetchData());
 
     //assert
-    expect(find.text('0'), findsOneWidget);
-    await tester.tap(find.byType(TextButton));
-    await tester.pump();
-    expect(find.text('2'), findsOneWidget);
+    verify(() => mockGetAllCustomersUseCase.execute());
+    expect(result.current.data.length, 2);
   });
 
   testWidgets("should return error message ", (WidgetTester tester) async {
     //arrange
     Either<Failure, List<Customer>> useCaseResult = Left(ServerFailure());
     when(() => mockGetAllCustomersUseCase.execute()).thenAnswer((_) async => useCaseResult);
+    final result = await buildHook((_) => useCustomerListViewModel(getAllCustomers: mockGetAllCustomersUseCase));
 
     //act
-    await tester.pumpWidget(HookBuilder(builder: (context) {
-      final viewModel = useCustomerListViewModel(getAllCustomers: mockGetAllCustomersUseCase);
-      return MaterialApp(home: TestWidget(viewModel));
-    }));
+    await act(() => result.current.fetchData());
 
     //assert
-    expect(find.text(''), findsOneWidget);
-    await tester.tap(find.byType(TextButton));
-    await tester.pump();
-    expect(find.text('Error Fetching Customers!'), findsOneWidget);
+    verify(() => mockGetAllCustomersUseCase.execute());
+    expect(result.current.error, 'Error Fetching Customers!');
   });
 }
